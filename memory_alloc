@@ -1,0 +1,175 @@
+#include <stdio.h>
+void first();
+void best();
+void worst();
+int main(){
+int k=1;
+while(k>0){
+int n;
+scanf("%d",&amp;n);
+if(n==1){
+first();
+}
+else if(n==2){
+best();
+}
+else if(n==3){
+worst();
+}
+else{
+break;
+}
+}
+return 0;
+}
+void first(){
+int p[4]={90,50,30,40};
+int m[5]={20,100,40,200,10};
+printf("Processes size:");
+for(int i=0;i<4;i++){
+printf("%d ",p[i]);
+}
+printf("\n");
+printf("Memory blocks:");
+for(int i=0;i<5;i++){
+printf("%d ",m[i]);
+}
+printf("\nFirst-fit\n");
+int fragment[5];
+int block[5];
+int process[5];
+for(int i=0;i<4;i++){
+for(int j=0;j<5;j++){}
+if(m[j]>p[i]){
+fragment[i] = m[j]-p[i];
+block[i] = j+1;
+process[i] = p[i];
+m[j] -= p[i];
+p[i] = 0;
+break;
+}
+}
+printf("process size\tblock number\n");
+for(int i=0;i<4;i++){
+printf("%d\t\t%d\n", process[i], block[i]);
+}
+int k=0,l=0;
+for(int i=0;i<4;i++){
+k += fragment[i];
+if(p[i]>0){
+l += p[i];
+}
+}
+printf("internal fragmentation:%d\nexternal fragmentation:%d\n", k,
+l);
+}
+void best(){
+int p[4]={90,50,30,40};
+int m[5]={20,100,40,200,10};
+printf("Processes size:");
+for(int i=0;i<4;i++){
+printf("%d ",p[i]);
+}
+printf("\n");
+printf("Memory blocks:");
+for(int i=0;i<5;i++){
+printf("%d ",m[i]);
+}
+printf("\nBest-fit\n");
+int fragment[5];
+int block[5];
+int process[5];
+for(int i=0;i<4;i++){
+int sub = m[0] - p[i];
+int k = 0;
+int bid = 0;
+if(sub <= 0){while(m[k] - p[i] < 0 &amp;&amp; k < 5){
+k++;
+sub = m[k] - p[i];
+bid = k;
+}
+}
+for(int j=0;j<5;j++){
+if(m[j] >= p[i]){
+if(sub > m[j] - p[i]){
+sub = m[j] - p[i];
+bid = j;
+}
+}
+}
+if(sub >= 0){
+fragment[i] = m[bid] - p[i];
+block[i] = bid+1;
+process[i] = p[i];
+m[bid] -= p[i];
+p[i] = 0;
+}
+}
+printf("process size\tblock number\n");
+for(int i=0;i<4;i++){
+printf("%d\t\t%d\n", process[i], block[i]);
+}
+int k=0,l=0;
+for(int i=0;i<4;i++){
+k += fragment[i];
+if(p[i]>0){
+l += p[i];
+}
+}
+printf("internal fragmentation:%d\nexternal fragmentation:%d\n", k,
+l);
+}
+void worst(){
+int p[4]={90,50,30,40};
+int m[5]={20,100,40,200,10};
+printf("Processes size:");
+for(int i=0;i<4;i++){
+printf("%d ",p[i]);
+}
+printf("\n");
+printf("Memory blocks:");for(int i=0;i<5;i++){
+printf("%d ",m[i]);
+}
+printf("\nWorst-fit\n");
+int fragment[5];
+int block[5];
+int process[5];
+for(int i=0;i<4;i++){
+int sub = m[0] - p[i];
+int k = 0;
+int bid = 0;
+if(sub <= 0){
+while(m[k] - p[i] < 0 &amp;&amp; k < 5){
+k++;
+sub = m[k] - p[i];
+bid = k;
+}
+}
+for(int j=0;j<5;j++){
+if(m[j] >= p[i]){
+if(sub < m[j] - p[i]){
+sub = m[j] - p[i];
+bid = j;
+}
+}
+}
+if(sub >= 0){
+fragment[i] = m[bid] - p[i];
+block[i] = bid+1;
+process[i] = p[i];
+m[bid] -= p[i];
+p[i] = 0;
+}
+}
+printf("process size\tblock number\n");
+for(int i=0;i<4;i++){
+printf("%d\t\t%d\n", process[i], block[i]);
+}
+int k=0,l=0;
+for(int i=0;i<4;i++){
+k += fragment[i];
+if(p[i]>0){
+l += p[i];
+}
+}l);
+}

@@ -1,0 +1,141 @@
+#include <stdio.h>
+int in(int size, int *array, int value)
+{
+int i;
+for (i = 0; i < size; i++)
+{
+if (array[i] == value)
+return 1;
+}
+return 0;
+}
+int closestIndex(int size, int currentLocation, int *array, int value,
+int direction)
+{
+int i = currentLocation;
+if (direction == -1)
+{
+for (i--; i >= 0; i--)
+{
+if (array[i] == value)
+return i;
+}
+return i;
+}
+else
+{
+for (i++; i < size; i++)
+{
+if (array[i] == value)
+{
+return i;
+}
+}
+return i;
+}
+}
+int extreme(int size, int *array, int type)
+{
+int extreme = 0;
+if (type == 1)
+{ // max
+int i = 0;
+int max = array[0];
+for (i++; i < size; i++)
+{
+if (array[i] > max)
+{
+max = array[i];
+extreme = i;
+}
+}
+return extreme;
+}
+else
+{
+int i = 0;
+int min = array[0];
+for (i++; i < size; i++)
+{
+if (array[i] < min)
+{
+min = array[i];
+extreme = i;
+}
+}
+return extreme;
+}
+}
+void printArray(int size, int *array)
+{
+int i = 0;
+for (; i < size; i++)
+{
+printf("%d ", array[i]);
+}
+printf("\n");
+}
+int main()
+{
+printf("21BAI1472\n");
+int n;
+printf("Enter number of page requests: ");
+scanf("%d", &n);
+int m;
+printf("Enter number of frames: ");
+scanf("%d", &m);
+int frames[m];
+int pageRequests[n];
+int i;
+for (i = 0; i < n; i++)
+{
+printf("Enter the page request %d: \n", i + 1);
+scanf("%d", &pageRequests[i]);
+}
+int faults = 0;
+int prevIndex[m];
+int filledBlocks = 0;
+int index = -1;
+for (i = 0; i < m; i++)
+frames[i] = -1;
+int pf = 0;
+printf("Page_requests frame_1 frame_2 frame_3 page_fault\n");
+for (i = 0; i < n; i++)
+{
+if (in(m, frames, pageRequests[i]) == 0)
+{
+pf = 1;
+faults++;
+}
+if (filledBlocks == m)
+{
+for (int j = 0; j < m; j++)
+{
+prevIndex[j] = closestIndex(n, i, pageRequests,
+frames[j], -1);
+}
+int farest = extreme(m, prevIndex, -1);
+frames[farest] = pageRequests[i];
+}
+else
+{
+frames[(++index) % m] = pageRequests[i];
+filledBlocks++;
+}
+printf("\t\t%d \t\t", pageRequests[i]);
+for (int j = 0; j < m; j++)
+{
+if (frames[j] == -1)
+{
+printf("- \t\t");
+}
+else
+{
+printf("%d \t\t", frames[j]);
+}
+}
+printf("%d \n", pf);
+pf = 0;
+}
+printf("Page faults : %d\n", faults);
+}

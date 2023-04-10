@@ -1,0 +1,43 @@
+ 
+#include <stdio.h>
+#include<stdlib.h>
+int main() {
+printf("21BAI1472\n");
+FILE *fp, *fw;
+fp = fopen("Doc.txt","r");char ch;
+while (1) {
+ch = fgetc(fp);
+if (ch == EOF)
+break;
+printf("%c", ch);
+}
+fw = fopen("Doc2.txt","w");
+char ch1[200] = "this is a text file in Doc2.txt";
+int i = 0;
+while (ch1[i] != '\0') {
+fputc(ch1[i], fw);
+i++;
+}
+fclose(fp);
+fclose(fw);
+char cha, source_file[25]= "Doc2.txt", target_file[25] = "Doc_new.txt";
+FILE *source, *target;
+source = fopen(source_file, "r");
+if( source == NULL )
+{
+printf("Press any key to exit...\n");
+exit(EXIT_FAILURE);
+}
+target = fopen(target_file, "w");
+if( target == NULL )
+{
+fclose(source);
+printf("Press any key to exit...\n");
+exit(EXIT_FAILURE);
+}
+while( ( cha = fgetc(source) ) != EOF )
+fputc(cha, target);
+printf("File copied successfully.\n");
+fclose(source);
+fclose(target);return 0;
+}

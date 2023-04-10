@@ -1,0 +1,70 @@
+ 
+#include <stdio.h>
+int main()
+{
+printf("21BAI1472\n");
+int n, i, j;
+printf("Enter no. of processes:");
+scanf("%d", &n);
+int Arr[n], BT[n], PR[n];
+for (i = 0; i < n; i++)
+{
+printf("Enter Arrival time, Burst time and priority for P%d : ", i + 1);
+scanf("%d %d %d", &Arr[i], &BT[i], &PR[i]);
+}
+int Pr[n], Ct[n];
+for (i = 0; i < n; i++)
+Pr[i] = PR[i];
+int count = 0, dec = 0;
+j = 0;
+while (j < n)
+{
+int max = -1, ind = -1;
+for (i = 0; i < n; i++)
+{
+if (Pr[i] == max)
+{
+if (Arr[i] < Arr[ind])
+ind = i;
+}
+else if (Pr[i] > max)
+{
+if (Arr[i] <= count)
+{
+max = Pr[i];
+ind = i;
+}
+}
+}
+if (ind != -1)
+{
+Ct[ind] = BT[ind] + count;
+count += BT[ind];j++;
+Pr[ind] = -2;
+dec = 0;
+}
+else
+{
+count++;
+dec = 1;
+}
+}
+int TAT[n], WT[n];
+for (i = 0; i < n; i++)
+TAT[i] = Ct[i] - Arr[i];
+for (i = 0; i < n; i++)
+WT[i] = TAT[i] - BT[i];
+printf("\nProcess\tArrivalTime\tBurstTime\tPriority\tCompletionTime\tTurnAroundT
+ime\tWaitingTime\n");
+for (i = 0; i < n; i++)
+printf("\tP%d\t\t%d\t\t\t%d\t\t\t%d\t\t\t%d\t\t\t\t%d\t\t\t\t%d\n", (i +
+1),Arr[i], BT[i], PR[i], Ct[i], TAT[i], WT[i]);
+float sum = 0;
+for (i = 0; i < n; i++)
+sum += (float)TAT[i];
+printf("\nAverage TAT: %f", sum / n);
+sum = 0;
+for (i = 0; i < n; i++)
+sum += (float)WT[i];
+printf("\nAverage WT: %f", sum / n);
+}

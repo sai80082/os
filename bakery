@@ -1,0 +1,80 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+
+#define NUM_THREADS 2
+
+int number[NUM_THREADS];
+int choosing[NUM_THREADS];
+int counter = 0;
+
+typedef enum
+{
+    false,
+    true
+} bool;
+
+void lock(int thread_id)
+{
+    choosing[thread_id] = true;
+    int max_number = 0;
+    for (int i = 0; i < NUM_THREADS; i++)
+    {
+        if (number[i] > max_number)
+        {
+            max_number = number[i];
+        }
+    }
+    number[thread_id] = max_number + 1;
+    choosing[thread_id] = false;
+    for (int i = 0; i < NUM_THREADS; i++)
+    {
+        while (choosing[i])
+        {
+            // Wait for other threads to choose their numbers
+        }
+        while (number[i] != 0 && (number[i] < number[thread_id] || (number[i] == number[thread_id] && i < thread_id)))
+        {
+            // Wait for other threads with lower number to complete their critical section
+        }
+    }
+}
+
+void unlock(int thread_id)
+{
+    number[thread_id] = 0;
+}
+
+void *thread_function(void *thread_id_ptr)
+{
+    int thread_id = *(int *)thread_id_ptr;
+    lock(thread_id);
+    counter++;
+    printf("Thread %d in critical section\n", thread_id);
+    unlock(thread_id);
+    printf("Thread %d exited critical section\n", thread_id);
+    pthread_exit(NULL);
+}
+
+int main()
+{
+    printf("21BAI1472\n");
+    pthread_t threads[NUM_THREADS];
+    for (int i = 0; i < NUM_THREADS; i++)
+    {
+        number[i] = 0;
+        choosing[i] = false;
+    }
+    int thread_ids[NUM_THREADS];
+    for (int i = 0; i < NUM_THREADS; i++)
+    {
+        thread_ids[i] = i;
+        pthread_create(&threads[i], NULL, thread_function, (void *)&thread_ids[i]);
+    }
+    for (int i = 0; i < NUM_THREADS; i++)
+    {
+        pthread_join(threads[i], NULL);
+    }
+    return 0;
+}
+

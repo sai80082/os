@@ -1,0 +1,44 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <unistd.h>
+int main() {
+pid_t pid;
+// Create a child process
+pid = fork();
+if (pid == 0) {
+// This is the child process, it will become an orphan
+printf("I am an orphan process (PID: %d)\n", getpid());
+sleep(30);
+} else {
+// This is the parent process
+printf("I am the parent process (PID: %d)\n", getpid());
+// Exit without waiting for child, causing it to become an
+orphan
+exit(0);
+}
+return 0;
+}
+-------------------------------------------------------------
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>int main() {
+pid_t pid;
+int status;
+// Create a child process
+pid = fork();
+if (pid == 0) {
+// This is the child process, it will become a zombies
+printf("I am the child process (PID: %d)\n", getpid());
+sleep(30);
+} else {
+// This is the parent process
+printf("I am the parent process (PID: %d)\n", getpid());
+// Wait for child to exit, preventing it from becoming a zombies
+waitpid(pid, &status, 0);
+}
+return 0;
+}

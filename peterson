@@ -1,0 +1,55 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+
+#define THREADS 2
+
+int flag[THREADS];
+int turn = 0;
+
+void enter_critical_section(int thread_id)
+{
+    int other_thread_id = 1 - thread_id;
+    flag[thread_id] = 1;
+    turn = other_thread_id;
+    while (flag[other_thread_id] == 1 && turn == other_thread_id)
+    {
+    }
+}
+
+void leave_critical_section(int thread_id)
+{
+    flag[thread_id] = 0;
+}
+void *thread_function(void *arg)
+{
+    int thread_id = *((int *)arg);
+    printf("Thread %d started\n", thread_id);
+    enter_critical_section(thread_id);
+    printf("Thread %d is in the critical section\n", thread_id);
+    leave_critical_section(thread_id);
+    printf("Thread %d finished\n", thread_id);
+    return NULL;
+}
+
+int main()
+{
+    printf("21BAI1472\n");
+    pthread_t threads[THREADS];
+    int thread_ids[THREADS];
+    for (int i = 0; i < THREADS; i++)
+    {
+        thread_ids[i] = i;
+        flag[i] = 0;
+    }
+    for (int i = 0; i < THREADS; i++)
+    {
+        pthread_create(&threads[i], NULL, thread_function, &thread_ids[i]);
+    }
+    for (int i = 0; i < THREADS; i++)
+    {
+        pthread_join(threads[i], NULL);
+    }
+    return 0;
+}
+

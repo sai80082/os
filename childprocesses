@@ -1,0 +1,51 @@
+ 
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <sys/wait.h>
+int main() {
+printf("21BAI1472 ");
+pid_t pid[4];
+for (int i = 0; i < 4; i++) {
+pid[i] = fork();
+if (pid[i] == 0) {
+printf("Child process %d, Parent ID: %d\n", getpid(),
+getppid());
+exit(0);
+}
+}
+for (int i = 0; i < 4; i++) {
+waitpid(pid[i], NULL, 0);
+}
+return 0;
+}
+--------------------------------
+
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <sys/wait.h>
+int main() {
+pid_t pid;
+printf("21BAI1472 ");
+pid = fork();
+if (pid == 0) {
+// Child process
+printf("Child process, ID: %d\n", getpid());
+for (int i = 0; i <= 10; i+=2) {
+printf("%d ", i);
+}
+printf("\n");
+exit(0);
+}
+else {
+// Parent process
+waitpid(pid, NULL, 0);
+printf("Parent process, ID: %d\n", getpid());
+for (int i = 1; i <= 10; i+=2) {
+printf("%d ", i);
+}
+printf("\n");
+}
+return 0;
+}
